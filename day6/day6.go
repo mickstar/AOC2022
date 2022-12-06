@@ -13,6 +13,7 @@ func readFile(filename string) (string, error) {
 	return string(bytes), nil
 }
 
+// isAnyOverlap returns true if any of the strings in the slice is not unique
 func isAnyOverlap(slice []string) bool {
 	dict := map[string]int{}
 	for _, c := range slice {
