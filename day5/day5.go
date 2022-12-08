@@ -28,7 +28,7 @@ func readInput(filename string) ([]Crate, []Move, error) {
 
 	crateLines := strings.Split(data[0], "\n")
 	// l is the list of numbers at the bottom of the crates
-	l := strings.Split(crateLines[len(crateLines)-1], "   ")
+	l := strings.Split(crateLines[len(crateLines)-1], " ")
 	// last is the last item on this slice
 	last := l[len(l)-1]
 	nCrates, err := strconv.Atoi(last)
@@ -66,6 +66,9 @@ func readInput(filename string) ([]Crate, []Move, error) {
 	moves := make([]Move, len(moveLines))
 	j := 0
 	for i, line := range moveLines {
+		if line == "" {
+			continue
+		}
 		pieces := strings.Split(line, " ")
 		moves[j] = Move{
 			Amount: forceReadInt(pieces[1]),
