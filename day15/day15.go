@@ -140,7 +140,10 @@ func main() {
 	for _, sensor := range data {
 		world[sensor.Position] = SensorCell
 		world[sensor.ClosestBeaken] = BeaconCell
+		//simulateWorld(&world, sensor)
 	}
+
+	//fmt.Println(world)
 
 	minX, maxX := -5_000_000, 5_000_000
 
@@ -158,6 +161,39 @@ func main() {
 
 		}
 	}
-	fmt.Println(greyCount)
+	fmt.Println("Part 1", greyCount)
 
+	maxX = 4_000_000
+	maxY := 4_000_000
+
+	fmt.Println("Part 2")
+	for x := 0; x <= maxX; x++ {
+		if x%1000 == 0 {
+			//fmt.Println(x)
+		}
+		finished := false
+		for y := 0; y <= maxY; y++ {
+			found := false
+
+			for _, sensor := range data {
+				d := distance(sensor.Position, sensor.ClosestBeaken)
+				myD := distance(sensor.Position, Coordinate{X: x, Y: y})
+				if myD <= d {
+					y += (d - myD)
+					found = true
+					break
+				}
+
+			}
+
+			if !found {
+				fmt.Println("found empty cell at ", x, ",", y, x*4_000_000+y)
+				finished = true
+				break
+			}
+		}
+		if finished {
+			break
+		}
+	}
 }
