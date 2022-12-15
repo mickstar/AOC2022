@@ -132,30 +132,32 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(data)
+
+	//Y_COORD := 10
+	Y_COORD := 2_000_000
+
 	world := make(World)
-	for i, sensor := range data {
-		fmt.Println("Simulating sensor", i, "of", len(data))
-		simulateWorld(&world, sensor)
+	for _, sensor := range data {
+		world[sensor.Position] = SensorCell
+		world[sensor.ClosestBeaken] = BeaconCell
 	}
 
-	minX, maxX, _, _ := getSize(world)
-	fmt.Println("x size", minX, maxX)
-
-	Y_COORD := 10
+	minX, maxX := -5_000_000, 5_000_000
 
 	greyCount := 0
 	for x := minX; x <= maxX; x++ {
-		cell, ok := world[Coordinate{X: x, Y: Y_COORD}]
-		if !ok {
-			continue
-		}
-		if cell == GreyZoneCell {
-			greyCount++
+		for _, sensor := range data {
+			d := distance(sensor.Position, sensor.ClosestBeaken)
+			if (distance(sensor.Position, Coordinate{X: x, Y: Y_COORD}) <= d) {
+				_, ok := world[Coordinate{X: x, Y: Y_COORD}]
+				if !ok {
+					greyCount++
+					break
+				}
+			}
+
 		}
 	}
-
-	fmt.Println(world)
 	fmt.Println(greyCount)
 
 }
